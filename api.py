@@ -1,11 +1,14 @@
 import requests
-from flask import Flask, request, jsonify, os
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
 # Configura il token di accesso e l'ID del file Figma
-FIGMA_ACCESS_TOKEN = os.getenv("FIGMA_ACCESS_TOKEN") # ⬅️ Inserisci qui il tuo token Figma
-FIGMA_FILE_ID = "0gGLeXcUVYMilhHwPLEjWi"  # ⬅️ Inserisci qui l'ID del file Figma
+import os  # ⬅️ Importa il modulo per leggere le variabili d'ambiente
+
+FIGMA_ACCESS_TOKEN = os.getenv("FIGMA_ACCESS_TOKEN")  # ⬅️ Legge il token da Render
+
+FIGMA_FILE_ID = "TUO_FILE_ID"  # ⬅️ Inserisci qui l'ID del file Figma
 
 # Funzione per creare un nodo in Figma
 def create_figma_node(name, x, y, width, height, color):
