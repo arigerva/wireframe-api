@@ -1,14 +1,12 @@
+import os
 import requests
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
 # Configura il token di accesso e l'ID del file Figma
-import os  # ⬅️ Importa il modulo per leggere le variabili d'ambiente
-
 FIGMA_ACCESS_TOKEN = os.getenv("FIGMA_ACCESS_TOKEN")  # ⬅️ Legge il token da Render
-
-FIGMA_FILE_ID = "TUO_FILE_ID"  # ⬅️ Inserisci qui l'ID del file Figma
+FIGMA_FILE_ID = os.getenv("FIGMA_FILE_ID")  # ⬅️ Legge l'ID del file da Render
 
 # Funzione per creare un nodo in Figma
 def create_figma_node(name, x, y, width, height, color):
@@ -27,17 +25,17 @@ def create_figma_node(name, x, y, width, height, color):
         }]
     }
 
-# Funzione per inviare i dati a Figma
+# Funzione per inviare i dati a Figma usando l'endpoint "post component sets"
 def send_to_figma(elements):
     headers = {
         "X-Figma-Token": FIGMA_ACCESS_TOKEN,
         "Content-Type": "application/json"
     }
     
-    figma_api_url = f"https://api.figma.com/v1/files/{FIGMA_FILE_ID}/nodes"
+    figma_api_url = f"https://api.figma.com/v1/files/{FIGMA_FILE_ID}/components"
     
     payload = {
-        "nodes": elements
+        "components": elements
     }
 
     response = requests.post(figma_api_url, headers=headers, json=payload)
@@ -45,6 +43,7 @@ def send_to_figma(elements):
     if response.status_code == 200:
         return f"https://www.figma.com/file/{FIGMA_FILE_ID}"
     else:
+        print("Errore API Figma:", response.json())  # Debugging
         return None
 
 @app.route('/generate-wireframe', methods=['POST'])
