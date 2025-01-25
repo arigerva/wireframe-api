@@ -57,7 +57,7 @@ def add_frame_to_figma():
     if response.status_code == 200:
         return f"https://www.figma.com/file/{FIGMA_FILE_ID}"
     else:
-        print("Errore API Figma:", response.json())
+        print("Errore API Figma:", response.status_code, response.text)
         return None
 
 @app.route('/generate-wireframe', methods=['POST'])
